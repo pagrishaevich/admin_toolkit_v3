@@ -13,7 +13,13 @@ require_command git
 
 cd "$REPO_DIR"
 
-git fetch "$AUTO_UPDATE_REMOTE"
+if [ "$DRY_RUN" = "1" ]; then
+  log "[DRY-RUN] git fetch $AUTO_UPDATE_REMOTE"
+  log "[UPDATE] dry-run skipped remote revision comparison"
+  exit 0
+fi
+
+run_cmd git fetch "$AUTO_UPDATE_REMOTE"
 
 LOCAL=$(git rev-parse HEAD)
 REMOTE=$(git rev-parse "$AUTO_UPDATE_REMOTE/$AUTO_UPDATE_BRANCH")

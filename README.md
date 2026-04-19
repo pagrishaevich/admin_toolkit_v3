@@ -68,6 +68,15 @@ cp custom/security.local.sh.example custom/security.local.sh
 bash scripts/bootstrap.sh
 ```
 
+Полезные режимы запуска:
+
+```bash
+bash scripts/bootstrap.sh --dry-run
+bash scripts/bootstrap.sh --step report
+bash scripts/bootstrap.sh --from-step network
+bash scripts/bootstrap.sh --list-steps
+```
+
 ## Конфигурация
 
 Основные параметры находятся в `config.sh`.
@@ -80,6 +89,9 @@ bash scripts/bootstrap.sh
 - `REPORTS_DIR`, `CIFS_SERVER`
 - `REPO_DIR`, `AUTO_UPDATE_REMOTE`, `AUTO_UPDATE_BRANCH`
 - `TOOLKIT_LOG_FILE`, `REPORT_ARCHIVE_DIR`
+- `SUPPORTED_DISTROS`
+- `FIREWALL_ENABLED`, `FIREWALL_SERVICES`, `FIREWALL_PORTS`
+- `SSHD_HARDENING_ENABLED`, `SSHD_PERMIT_ROOT_LOGIN`, `SSHD_PASSWORD_AUTH`
 
 Если `config.sh` отсутствует, toolkit использует значения из `config.sh.example`.
 
@@ -112,7 +124,10 @@ bash scripts/validate.sh
 - конфигурация вынесена в отдельный шаблон
 - bootstrap стал безопаснее с точки зрения lock-механизма
 - для скриптов унифицирован `set -euo pipefail`
+- добавлены `dry-run`, запуск отдельных шагов и `preflight`
 - шаги proxy, domain и CIFS сделаны более идемпотентными
+- расширен инвентаризационный отчёт в CSV и JSON
+- добавлен базовый hardening для SSH и firewalld
 - `self-update` стал безопаснее
 - добавлены локальные hooks для кастомизации
 - добавлены локальная валидация и CI-проверка

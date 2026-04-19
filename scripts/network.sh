@@ -5,6 +5,6 @@ require_root
 require_command nmcli
 CONN=$(nmcli -t -f NAME connection show --active | head -1)
 [ -n "$CONN" ] || { log "[NETWORK] no active connection"; exit 1; }
-nmcli con mod "$CONN" ipv4.dns "$DNS_SERVERS"
-nmcli con up "$CONN" || true
+run_cmd nmcli con mod "$CONN" ipv4.dns "$DNS_SERVERS"
+run_cmd nmcli con up "$CONN" || true
 log "[NETWORK] done"

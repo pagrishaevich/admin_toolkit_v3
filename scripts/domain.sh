@@ -18,14 +18,14 @@ if realm list 2>/dev/null | grep -Fq "$DOMAIN"; then
 fi
 
 if command -v join-to-domain.sh >/dev/null 2>&1; then
-  join-to-domain.sh -d "$DOMAIN" -n "$HOSTNAME" -u "$DOMAIN_USER" -y -f
+  run_cmd join-to-domain.sh -d "$DOMAIN" -n "$HOSTNAME" -u "$DOMAIN_USER" -y -f
 else
   require_command realm
-  realm join "$DOMAIN" -U "$DOMAIN_USER"
+  run_cmd realm join "$DOMAIN" -U "$DOMAIN_USER"
 fi
 
 if command_exists systemctl; then
-  systemctl restart sssd || true
+  run_cmd systemctl restart sssd || true
 fi
 
 log "[DOMAIN] done"

@@ -3,3 +3,5 @@ set -euo pipefail
 
 # Example: install site-specific packages here.
 # dnf install -y mc vim git
+#
+# Kaspersky is handled by scripts/kaspersky.sh via config.sh settings.

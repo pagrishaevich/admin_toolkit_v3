@@ -92,6 +92,9 @@ bash scripts/bootstrap.sh --list-steps
 - `SUPPORTED_DISTROS`
 - `FIREWALL_ENABLED`, `FIREWALL_SERVICES`, `FIREWALL_PORTS`
 - `SSHD_HARDENING_ENABLED`, `SSHD_PERMIT_ROOT_LOGIN`, `SSHD_PASSWORD_AUTH`
+- `KASPERSKY_*` для автоматической установки Kaspersky Endpoint Security из локальной папки/сетевой шары
+- `CRYPTO_PRO_*` для тихой установки КриптоПро CSP из папки с дистрибутивами
+- `VIPNET_*` для тихой установки ViPNet Client без импорта ключей
 
 Если `config.sh` отсутствует, toolkit использует значения из `config.sh.example`.
 
@@ -116,6 +119,82 @@ bash scripts/validate.sh
 Скрипт всегда запускает `bash -n`, а `shellcheck` и `shfmt` использует только если они установлены в системе.
 
 Также в GitHub Actions настроена автоматическая проверка shell-скриптов на `push` и `pull request`.
+
+## Автоустановка Kaspersky
+
+Toolkit умеет автоматически установить Kaspersky Endpoint Security из уже смонтированной папки, если включить параметры в `config.sh`.
+
+Минимальный пример:
+
+```bash
+KASPERSKY_ENABLED="1"
+KASPERSKY_SHARE_DIR="/mnt/distr/linux/bootstrap/kesl"
+KASPERSKY_INSTALL_NETWORK_AGENT="1"
+KASPERSKY_AGENT_SERVER="ksc.example.local"
+KASPERSKY_LICENSE="/mnt/distr/linux/bootstrap/kesl/license.key"
+```
+
+Ожидается, что в `KASPERSKY_SHARE_DIR` лежат RPM-файлы вида:
+
+- `kesl-*.rpm`
+- `klnagent64-*.rpm` при включённом `KASPERSKY_INSTALL_NETWORK_AGENT="1"`
+- `kesl-gui-*.rpm` при включённом `KASPERSKY_INSTALL_GUI="1"`
+
+Шаг установки выполняется в `software` и использует штатные silent-механизмы Kaspersky:
+
+- `kesl-setup.pl --autoinstall=...` для KESL
+- `KLAUTOANSWERS=... dnf install ...` для Network Agent
+
+## Тихая установка КриптоПро CSP
+
+Toolkit умеет установить КриптоПро CSP 5.0 из локальной папки без графического мастера.
+
+Минимальный пример:
+
+```bash
+CRYPTO_PRO_ENABLED="1"
+CRYPTO_PRO_DIST_DIR="/mnt/distr/linux/bootstrap/cryptopro"
+CRYPTO_PRO_LICENSE_KEY=""
+```
+
+Ожидается, что в `CRYPTO_PRO_DIST_DIR` лежат:
+
+- архив `linux-amd64*.tgz`
+- RPM-пакеты КриптоПро CSP x64
+- опционально `librtpkcs11ecp-*.rpm` для Рутокен PKCS#11
+- опционально `cprocsp-rdr-jacarta*.rpm` для JaCarta
+
+По умолчанию модуль ставит основной набор пакетов для сценария из инструкции РЕД ОС:
+
+- КС1
+- графические диалоги
+- поддержку токенов и смарт-карт
+- `cptools`
+- PKCS#11
+- TLS-туннели (`cprocsp-stunnel-64`)
+
+Дополнительные драйверы и лицензия включаются параметрами `CRYPTO_PRO_*`.
+
+## Тихая установка ViPNet Client
+
+Toolkit умеет установить ViPNet Client из локальной папки без последующей загрузки ключей.
+
+Минимальный пример:
+
+```bash
+VIPNET_ENABLED="1"
+VIPNET_DIST_DIR="/mnt/distr/linux/bootstrap/vipnet"
+VIPNET_VARIANT="gui"
+```
+
+Ожидается, что в `VIPNET_DIST_DIR` лежит архив `ViPNet*.zip` или уже распакованный каталог с RPM.
+
+Варианты установки:
+
+- `VIPNET_VARIANT="gui"` для GUI-версии
+- `VIPNET_VARIANT="cli"` для консольной версии
+
+Импорт ключей `*.dst` модуль намеренно не выполняет.
 
 ## Текущее состояние
 

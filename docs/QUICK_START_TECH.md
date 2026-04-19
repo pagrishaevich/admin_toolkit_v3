@@ -12,7 +12,7 @@ install -d -m 700 /root/.bootstrap
 printf '%s\n' 'DOMAIN_PASSWORD' > /root/.bootstrap/domain.pass
 printf '%s\n' 'CIFS_PASSWORD' > /root/.bootstrap/cifs.pass
 chmod 600 /root/.bootstrap/domain.pass /root/.bootstrap/cifs.pass
-bash scripts/bootstrap.sh
+bash install-host.sh
 ```
 
 ## Перед запуском проверить

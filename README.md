@@ -77,6 +77,12 @@ chmod 600 /root/.bootstrap/domain.pass /root/.bootstrap/cifs.pass
 bash scripts/bootstrap.sh
 ```
 
+Для запуска через одну точку входа можно использовать:
+
+```bash
+bash install-host.sh
+```
+
 Полезные режимы запуска:
 
 ```bash

@@ -1,33 +1,60 @@
 # admin_toolkit_v3
 
-Набор shell-скриптов для первичной настройки Linux-хоста: proxy, repos, packages, network, time, domain join, CIFS, отчётность и post-check.
+Bootstrap toolkit for Linux workstations and admin-managed hosts: proxy, package bootstrap, network, time sync, domain join, CIFS mounts, reporting, and post-check validation.
 
-## Что улучшено в этой версии
+![CI](https://github.com/pagrishaevich/admin_toolkit_v3/actions/workflows/shell-ci.yml/badge.svg)
 
-- Конфиг вынесен в `config.sh` с шаблоном `config.sh.example`.
-- Добавлены базовые helper-функции и более строгие проверки.
-- Ключевые шаги стали ближе к идемпотентным.
-- `bootstrap.sh` теперь аккуратнее обрабатывает lock и выполнение шагов.
-- Добавлены локальные hooks в `custom/*.local.sh`.
-- Добавлена проверка качества через `scripts/validate.sh` и CI workflow.
+## What It Solves
 
-## Быстрый старт
+This project helps standardize first-run host setup with a small set of Bash scripts that can be adapted for a specific environment without constantly rewriting the core flow.
 
-1. Скопируйте шаблон:
+It is built around three goals:
+
+- predictable bootstrap flow
+- safer reruns and more idempotent behavior
+- clean separation between core logic and site-specific customization
+
+## Project Layout
+
+```text
+scripts/
+  bootstrap.sh      # main orchestration
+  common.sh         # shared config and helpers
+  validate.sh       # local quality checks
+custom/
+  *.local.sh        # site-specific extensions
+config.sh.example   # environment template
+```
+
+## Bootstrap Flow
+
+`scripts/bootstrap.sh` runs the toolkit in this order:
+
+1. `self-update`
+2. `proxy`
+3. `repos`
+4. `packages`
+5. `network`
+6. `time`
+7. `autoupdate`
+8. `domain`
+9. `cifs`
+10. `report`
+11. `software`
+12. `security`
+13. `postcheck`
+
+## Quick Start
+
+1. Create local configuration:
 
 ```bash
 cp config.sh.example config.sh
 ```
 
-2. Заполните значения под свою площадку.
+2. Adjust values for your environment.
 
-3. Запустите bootstrap от `root`:
-
-```bash
-bash scripts/bootstrap.sh
-```
-
-4. Для локальной кастомизации при необходимости скопируйте шаблоны:
+3. Optionally enable local extensions:
 
 ```bash
 cp custom/repos.local.sh.example custom/repos.local.sh
@@ -35,32 +62,63 @@ cp custom/software.local.sh.example custom/software.local.sh
 cp custom/security.local.sh.example custom/security.local.sh
 ```
 
-## Конфигурация
+4. Run bootstrap as `root`:
 
-Основные параметры:
+```bash
+bash scripts/bootstrap.sh
+```
+
+## Configuration
+
+Main settings live in `config.sh`.
+
+Common variables:
 
 - `DOMAIN`, `DOMAIN_USER`
 - `DNS_SERVERS`, `NTP_SERVER`
 - `PROXY`
 - `REPORTS_DIR`, `CIFS_SERVER`
 - `REPO_DIR`, `AUTO_UPDATE_REMOTE`, `AUTO_UPDATE_BRANCH`
+- `TOOLKIT_LOG_FILE`, `REPORT_ARCHIVE_DIR`
 
-Если `config.sh` отсутствует, будут использованы значения из `config.sh.example`.
+If `config.sh` is missing, the toolkit falls back to `config.sh.example`.
 
-## Валидация
+## Customization Model
 
-Локальная проверка:
+Core scripts stay generic, while environment-specific steps can live in local hooks:
+
+- `custom/repos.local.sh`
+- `custom/software.local.sh`
+- `custom/security.local.sh`
+
+These hooks are loaded only if the files exist, which keeps the main toolkit reusable across multiple environments.
+
+## Validation
+
+Run local checks with:
 
 ```bash
 bash scripts/validate.sh
 ```
 
-Скрипт всегда проверяет `bash -n`, а `shellcheck` и `shfmt` запускает только если они установлены.
+The validator always runs `bash -n` and will also run `shellcheck` and `shfmt` when they are installed.
 
-## Расширение
+GitHub Actions also runs shell validation on push and pull request.
 
-- `scripts/repos.sh` вызывает `custom/repos.local.sh`, если файл существует.
-- `scripts/software.sh` вызывает `custom/software.local.sh`, если файл существует.
-- `scripts/security.sh` вызывает `custom/security.local.sh`, если файл существует.
+## Current State
 
-Так можно держать site-specific логику отдельно от core toolkit.
+Already improved in this version:
+
+- externalized config template
+- safer bootstrap locking
+- more consistent `set -euo pipefail`
+- more idempotent proxy, domain, and CIFS steps
+- safer self-update behavior
+- local extension hooks
+- shell validation script and CI workflow
+
+Still intentionally lightweight:
+
+- `repos`, `software`, and parts of `security` are extension points by design
+- no packaging or installer yet
+- no automated integration test environment yet

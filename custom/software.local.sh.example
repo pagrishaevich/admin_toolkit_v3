@@ -1,0 +1,5 @@
+#!/bin/bash
+set -euo pipefail
+
+# Example: install site-specific packages here.
+# dnf install -y mc vim git

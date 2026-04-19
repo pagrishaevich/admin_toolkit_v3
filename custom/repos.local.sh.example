@@ -1,0 +1,5 @@
+#!/bin/bash
+set -euo pipefail
+
+# Example: define internal repository files here.
+# cp /srv/bootstrap/company.repo /etc/yum.repos.d/company.repo

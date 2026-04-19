@@ -1,14 +1,14 @@
-Toolkit evolution v3 complete.
-v3.1.0 notes
+Развитие toolkit v3 завершено.
+Заметки к v3.1.0
 
-- Added external configuration template via config.sh.example.
-- Added README with setup and known limitations.
-- Standardized most scripts on set -euo pipefail.
-- Replaced ad-hoc lock file handling with flock in bootstrap.
-- Removed automatic git pull during self-update to avoid mixed-version runs.
-- Made proxy configuration update idempotent.
-- Added guard for already joined domain.
-- Replaced destructive repo cleanup with explicit no-op placeholder.
-- Added local hook mechanism via custom/*.local.sh.
-- Added scripts/validate.sh for local syntax and lint checks.
-- Added GitHub Actions workflow for shell validation.
+- добавлен внешний шаблон конфигурации через `config.sh.example`
+- добавлен `README.md` с инструкцией по запуску и текущими ограничениями
+- большинство скриптов переведено на `set -euo pipefail`
+- ad-hoc обработка lock-файла в bootstrap заменена на `flock`
+- убран автоматический `git pull` во время self-update, чтобы избежать смешанных версий кода
+- обновление proxy-конфигурации сделано идемпотентным
+- добавлена проверка на уже выполненный ввод в домен
+- опасная очистка repo-конфигурации заменена явной безопасной заглушкой
+- добавлен механизм локальных hooks через `custom/*.local.sh`
+- добавлен `scripts/validate.sh` для синтаксической проверки и линтинга
+- добавлен GitHub Actions workflow для проверки shell-скриптов

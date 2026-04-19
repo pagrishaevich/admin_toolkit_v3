@@ -1,15 +1,15 @@
 v3.1.0 - 2026-04-19
-- config.sh.example and README added
-- safer bootstrap lock and step logging
-- stricter shell options in all scripts
-- idempotent proxy/domain/CIFS behavior improvements
-- destructive repo cleanup replaced with safe placeholder
-- local custom hooks added for repos/software/security
-- validate.sh and GitHub Actions shell CI added
+- добавлены `config.sh.example` и `README.md`
+- сделан более безопасный lock-механизм bootstrap и логирование шагов
+- для всех скриптов ужесточены shell-настройки
+- улучшена идемпотентность шагов proxy/domain/CIFS
+- опасная очистка repo-конфигурации заменена безопасной заглушкой
+- добавлены локальные hooks для repos/software/security
+- добавлены `validate.sh` и GitHub Actions CI для shell-скриптов
 
 v3.0.0 - 2026-04-17
 - self-update
-- syslog logging
-- fail-fast
+- логирование в syslog
+- fail-fast режим
 - postcheck
-- report fix
+- исправление отчёта

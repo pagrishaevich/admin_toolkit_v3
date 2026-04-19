@@ -62,7 +62,16 @@ cp custom/software.local.sh.example custom/software.local.sh
 cp custom/security.local.sh.example custom/security.local.sh
 ```
 
-4. Запустите bootstrap от `root`:
+4. Подготовьте файлы секретов для безынтерактивного ввода в домен и монтирования CIFS:
+
+```bash
+install -d -m 700 /root/.bootstrap
+printf '%s\n' 'DOMAIN_PASSWORD' > /root/.bootstrap/domain.pass
+printf '%s\n' 'CIFS_PASSWORD' > /root/.bootstrap/cifs.pass
+chmod 600 /root/.bootstrap/domain.pass /root/.bootstrap/cifs.pass
+```
+
+5. Запустите bootstrap от `root`:
 
 ```bash
 bash scripts/bootstrap.sh
@@ -83,10 +92,10 @@ bash scripts/bootstrap.sh --list-steps
 
 Чаще всего используются:
 
-- `DOMAIN`, `DOMAIN_USER`
+- `DOMAIN`, `DOMAIN_USER`, `DOMAIN_PASSWORD_FILE`
 - `DNS_SERVERS`, `NTP_SERVER`
 - `PROXY`
-- `REPORTS_DIR`, `CIFS_SERVER`
+- `REPORTS_DIR`, `CIFS_SERVER`, `CIFS_INV_REMOTE`, `CIFS_DISTR_REMOTE`, `CIFS_USERNAME`, `CIFS_PASSWORD_FILE`
 - `REPO_DIR`, `AUTO_UPDATE_REMOTE`, `AUTO_UPDATE_BRANCH`
 - `TOOLKIT_LOG_FILE`, `REPORT_ARCHIVE_DIR`
 - `SUPPORTED_DISTROS`

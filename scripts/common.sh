@@ -81,6 +81,16 @@ fi
 : "${VIPNET_DIST_DIR:=/mnt/distr/linux/bootstrap/vipnet}"
 : "${VIPNET_ARCHIVE_PATTERN:=ViPNet*.zip}"
 : "${VIPNET_VARIANT:=gui}"
+: "${YANDEX_BROWSER_ENABLED:=0}"
+: "${YANDEX_BROWSER_RELEASE_PACKAGE:=yandex-browser-release}"
+: "${YANDEX_BROWSER_PACKAGE:=yandex-browser-stable}"
+: "${R7_OFFICE_ENABLED:=0}"
+: "${R7_OFFICE_RELEASE_PACKAGE:=r7-release}"
+: "${R7_OFFICE_PACKAGE:=r7-office}"
+: "${R7_ORGANIZER_ENABLED:=0}"
+: "${R7_ORGANIZER_PACKAGE:=r7organizer}"
+: "${R7_GRAFIKA_ENABLED:=0}"
+: "${R7_GRAFIKA_PACKAGE:=R7Grafika}"
 
 log() {
   local msg

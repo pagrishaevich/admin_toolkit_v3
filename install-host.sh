@@ -91,4 +91,11 @@ if [ "${VIPNET_ENABLED:-0}" = "1" ]; then
   fi
 fi
 
+if [ "${YANDEX_BROWSER_ENABLED:-0}" = "1" ] || [ "${R7_OFFICE_ENABLED:-0}" = "1" ]; then
+  if ! command -v dnf >/dev/null 2>&1; then
+    echo "[install-host] missing dnf for repository package installation" >&2
+    exit 1
+  fi
+fi
+
 exec bash "$ROOT_DIR/scripts/bootstrap.sh"

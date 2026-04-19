@@ -110,6 +110,8 @@ bash scripts/bootstrap.sh --list-steps
 - `KASPERSKY_*` для автоматической установки Kaspersky Endpoint Security из локальной папки/сетевой шары
 - `CRYPTO_PRO_*` для тихой установки КриптоПро CSP из папки с дистрибутивами
 - `VIPNET_*` для тихой установки ViPNet Client без импорта ключей
+- `YANDEX_BROWSER_*` для установки Яндекс Браузера из подключаемого репозитория
+- `R7_*` для установки Р7-Офис и опциональных пакетов из подключаемого репозитория
 
 Если `config.sh` отсутствует, toolkit использует значения из `config.sh.example`.
 
@@ -210,6 +212,47 @@ VIPNET_VARIANT="gui"
 - `VIPNET_VARIANT="cli"` для консольной версии
 
 Импорт ключей `*.dst` модуль намеренно не выполняет.
+
+## Установка Яндекс Браузера из репозитория
+
+Toolkit умеет автоматически подключить репозиторий Яндекс Браузера и установить сам браузер в шаге `software`.
+
+Минимальный пример:
+
+```bash
+YANDEX_BROWSER_ENABLED="1"
+YANDEX_BROWSER_RELEASE_PACKAGE="yandex-browser-release"
+YANDEX_BROWSER_PACKAGE="yandex-browser-stable"
+```
+
+По инструкции РЕД ОС используется стандартная схема:
+
+- `dnf install yandex-browser-release`
+- `dnf install yandex-browser-stable`
+
+## Установка Р7-Офис из репозитория
+
+Toolkit умеет автоматически подключить репозиторий Р7 и установить офисный пакет в шаге `software`.
+
+Минимальный пример:
+
+```bash
+R7_OFFICE_ENABLED="1"
+R7_OFFICE_RELEASE_PACKAGE="r7-release"
+R7_OFFICE_PACKAGE="r7-office"
+R7_ORGANIZER_ENABLED="0"
+R7_GRAFIKA_ENABLED="0"
+```
+
+По инструкции РЕД ОС используется стандартная схема:
+
+- `dnf install r7-release`
+- `dnf install r7-office`
+
+Дополнительно можно включить:
+
+- `r7organizer`
+- `R7Grafika`
 
 ## Текущее состояние
 

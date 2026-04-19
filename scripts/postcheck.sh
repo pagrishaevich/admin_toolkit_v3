@@ -86,6 +86,30 @@ check_vipnet() {
   check_ok "VIPNET COMMAND" "command -v vipnetclient"
 }
 
+check_yandex_browser() {
+  if [ "$YANDEX_BROWSER_ENABLED" != "1" ]; then
+    return 0
+  fi
+
+  check_ok "YANDEX BROWSER RPM" "rpm -q \"$YANDEX_BROWSER_PACKAGE\""
+}
+
+check_r7office() {
+  if [ "$R7_OFFICE_ENABLED" != "1" ]; then
+    return 0
+  fi
+
+  check_ok "R7 OFFICE RPM" "rpm -q \"$R7_OFFICE_PACKAGE\""
+
+  if [ "$R7_ORGANIZER_ENABLED" = "1" ]; then
+    check_ok "R7 ORGANIZER RPM" "rpm -q \"$R7_ORGANIZER_PACKAGE\""
+  fi
+
+  if [ "$R7_GRAFIKA_ENABLED" = "1" ]; then
+    check_ok "R7 GRAFIKA RPM" "rpm -q \"$R7_GRAFIKA_PACKAGE\""
+  fi
+}
+
 realm list | grep -q "$DOMAIN" && log "DOMAIN OK" || { log "DOMAIN FAIL"; FAIL=1; }
 mount | grep -Fq "$CIFS_SERVER" && log "CIFS OK" || { log "CIFS FAIL"; FAIL=1; }
 systemctl is-active chronyd >/dev/null && log "TIME OK" || { log "TIME FAIL"; FAIL=1; }
@@ -93,6 +117,8 @@ systemctl is-enabled dnf-automatic.timer >/dev/null && log "AUTOUPDATE OK" || { 
 check_kaspersky
 check_cryptopro
 check_vipnet
+check_yandex_browser
+check_r7office
 
 if [ "$FAIL" -eq 0 ]; then
   log "[RESULT] SUCCESS"

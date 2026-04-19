@@ -1,34 +1,34 @@
 # admin_toolkit_v3
 
-Bootstrap toolkit for Linux workstations and admin-managed hosts: proxy, package bootstrap, network, time sync, domain join, CIFS mounts, reporting, and post-check validation.
+Набор скриптов для первичной настройки Linux-хостов: proxy, пакетная инициализация, сеть, синхронизация времени, ввод в домен, CIFS-монтирования, отчётность и итоговая проверка состояния.
 
 ![CI](https://github.com/pagrishaevich/admin_toolkit_v3/actions/workflows/shell-ci.yml/badge.svg)
 
-## What It Solves
+## Для чего нужен проект
 
-This project helps standardize first-run host setup with a small set of Bash scripts that can be adapted for a specific environment without constantly rewriting the core flow.
+Проект помогает стандартизировать первичную настройку рабочих станций и управляемых хостов с помощью небольшого набора Bash-скриптов, которые можно адаптировать под конкретную инфраструктуру без постоянной переработки основной логики.
 
-It is built around three goals:
+Ключевые цели:
 
-- predictable bootstrap flow
-- safer reruns and more idempotent behavior
-- clean separation between core logic and site-specific customization
+- предсказуемый порядок bootstrap-настройки
+- более безопасный повторный запуск и идемпотентное поведение
+- разделение базового toolkit и локальной логики площадки
 
-## Project Layout
+## Структура проекта
 
 ```text
 scripts/
-  bootstrap.sh      # main orchestration
-  common.sh         # shared config and helpers
-  validate.sh       # local quality checks
+  bootstrap.sh      # основной оркестратор
+  common.sh         # общий конфиг и helper-функции
+  validate.sh       # локальная проверка качества
 custom/
-  *.local.sh        # site-specific extensions
-config.sh.example   # environment template
+  *.local.sh        # локальные расширения под инфраструктуру
+config.sh.example   # шаблон конфигурации
 ```
 
-## Bootstrap Flow
+## Порядок выполнения
 
-`scripts/bootstrap.sh` runs the toolkit in this order:
+`scripts/bootstrap.sh` запускает шаги в таком порядке:
 
 1. `self-update`
 2. `proxy`
@@ -44,17 +44,17 @@ config.sh.example   # environment template
 12. `security`
 13. `postcheck`
 
-## Quick Start
+## Быстрый старт
 
-1. Create local configuration:
+1. Создайте локальную конфигурацию:
 
 ```bash
 cp config.sh.example config.sh
 ```
 
-2. Adjust values for your environment.
+2. Заполните параметры под свою инфраструктуру.
 
-3. Optionally enable local extensions:
+3. При необходимости включите локальные расширения:
 
 ```bash
 cp custom/repos.local.sh.example custom/repos.local.sh
@@ -62,17 +62,17 @@ cp custom/software.local.sh.example custom/software.local.sh
 cp custom/security.local.sh.example custom/security.local.sh
 ```
 
-4. Run bootstrap as `root`:
+4. Запустите bootstrap от `root`:
 
 ```bash
 bash scripts/bootstrap.sh
 ```
 
-## Configuration
+## Конфигурация
 
-Main settings live in `config.sh`.
+Основные параметры находятся в `config.sh`.
 
-Common variables:
+Чаще всего используются:
 
 - `DOMAIN`, `DOMAIN_USER`
 - `DNS_SERVERS`, `NTP_SERVER`
@@ -81,44 +81,44 @@ Common variables:
 - `REPO_DIR`, `AUTO_UPDATE_REMOTE`, `AUTO_UPDATE_BRANCH`
 - `TOOLKIT_LOG_FILE`, `REPORT_ARCHIVE_DIR`
 
-If `config.sh` is missing, the toolkit falls back to `config.sh.example`.
+Если `config.sh` отсутствует, toolkit использует значения из `config.sh.example`.
 
-## Customization Model
+## Модель расширения
 
-Core scripts stay generic, while environment-specific steps can live in local hooks:
+Базовые скрипты остаются универсальными, а логика, завязанная на конкретную площадку, выносится в локальные hooks:
 
 - `custom/repos.local.sh`
 - `custom/software.local.sh`
 - `custom/security.local.sh`
 
-These hooks are loaded only if the files exist, which keeps the main toolkit reusable across multiple environments.
+Эти файлы подключаются только если существуют, поэтому core-часть проекта можно переиспользовать в разных окружениях.
 
-## Validation
+## Проверка
 
-Run local checks with:
+Локальная валидация:
 
 ```bash
 bash scripts/validate.sh
 ```
 
-The validator always runs `bash -n` and will also run `shellcheck` and `shfmt` when they are installed.
+Скрипт всегда запускает `bash -n`, а `shellcheck` и `shfmt` использует только если они установлены в системе.
 
-GitHub Actions also runs shell validation on push and pull request.
+Также в GitHub Actions настроена автоматическая проверка shell-скриптов на `push` и `pull request`.
 
-## Current State
+## Текущее состояние
 
-Already improved in this version:
+Что уже улучшено:
 
-- externalized config template
-- safer bootstrap locking
-- more consistent `set -euo pipefail`
-- more idempotent proxy, domain, and CIFS steps
-- safer self-update behavior
-- local extension hooks
-- shell validation script and CI workflow
+- конфигурация вынесена в отдельный шаблон
+- bootstrap стал безопаснее с точки зрения lock-механизма
+- для скриптов унифицирован `set -euo pipefail`
+- шаги proxy, domain и CIFS сделаны более идемпотентными
+- `self-update` стал безопаснее
+- добавлены локальные hooks для кастомизации
+- добавлены локальная валидация и CI-проверка
 
-Still intentionally lightweight:
+Что пока остаётся намеренно простым:
 
-- `repos`, `software`, and parts of `security` are extension points by design
-- no packaging or installer yet
-- no automated integration test environment yet
+- `repos`, `software` и часть `security` оставлены как точки расширения
+- пока нет отдельной упаковки или инсталлятора
+- пока нет полноценного интеграционного тестового окружения

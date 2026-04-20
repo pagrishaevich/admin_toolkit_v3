@@ -29,7 +29,7 @@ custom/
 
 `scripts/bootstrap.sh` запускает шаги в таком порядке:
 
-1. `self-update`
+1. `self-update` (опционально, если `SELF_UPDATE_ENABLED="1"`)
 2. `proxy`
 3. `repos`
 4. `packages`
@@ -96,6 +96,7 @@ bash scripts/bootstrap.sh --list-steps
 - `PROXY`
 - `REPORTS_DIR`, `CIFS_SERVER`, `CIFS_INV_REMOTE`, `CIFS_DISTR_REMOTE`, `CIFS_USERNAME`, `CIFS_PASSWORD_FILE`
 - `REPO_DIR`, `AUTO_UPDATE_REMOTE`, `AUTO_UPDATE_BRANCH`
+- `SELF_UPDATE_ENABLED`
 - `TOOLKIT_LOG_FILE`, `REPORT_ARCHIVE_DIR`
 - `SUPPORTED_DISTROS`
 - `FIREWALL_ENABLED`, `FIREWALL_SERVICES`, `FIREWALL_PORTS`

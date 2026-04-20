@@ -2,6 +2,11 @@
 set -euo pipefail
 source "$(dirname "$0")/common.sh"
 
+if [ "${SELF_UPDATE_ENABLED:-0}" != "1" ]; then
+  log "[UPDATE] disabled"
+  exit 0
+fi
+
 log "[UPDATE] checking..."
 
 if [ ! -d "$REPO_DIR/.git" ]; then

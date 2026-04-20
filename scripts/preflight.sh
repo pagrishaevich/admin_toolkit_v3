@@ -26,7 +26,9 @@ fi
 for step in "${SELECTED_STEPS[@]}"; do
   case "$step" in
     self-update)
-      require_command git
+      if [ "${SELF_UPDATE_ENABLED:-0}" = "1" ]; then
+        require_command git
+      fi
       ;;
     proxy|packages|repos|autoupdate)
       require_command dnf

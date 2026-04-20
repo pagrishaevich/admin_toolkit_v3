@@ -85,6 +85,7 @@ install_kaspersky() {
   local agent_answers=""
   local kesl_setup_rc=0
   local kesl_setup_timeout="${KASPERSKY_SETUP_TIMEOUT:-300}"
+  local kesl_setup_kill_after="${KASPERSKY_SETUP_KILL_AFTER:-10}"
 
   if [ "$KASPERSKY_ENABLED" != "1" ]; then
     log "[KASPERSKY] skipped"
@@ -143,7 +144,7 @@ install_kaspersky() {
     write_kesl_autoinstall "$kesl_autoinstall"
     log "[KASPERSKY] running silent initial configuration"
     set +e
-    timeout "$kesl_setup_timeout" /opt/kaspersky/kesl/bin/kesl-setup.pl --autoinstall="$kesl_autoinstall"
+    timeout -k "$kesl_setup_kill_after" "$kesl_setup_timeout" setsid /opt/kaspersky/kesl/bin/kesl-setup.pl --autoinstall="$kesl_autoinstall"
     kesl_setup_rc=$?
     set -e
     if [ "$kesl_setup_rc" -ne 0 ]; then

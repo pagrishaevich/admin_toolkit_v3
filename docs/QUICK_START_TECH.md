@@ -7,11 +7,12 @@
 ```bash
 git clone https://github.com/pagrishaevich/admin_toolkit_v3.git
 cd admin_toolkit_v3
+chmod +x admin_toolkit_v3/*.sh
 install -d -m 700 /root/.bootstrap
 printf '%s\n' 'DOMAIN_PASSWORD' > /root/.bootstrap/domain.pass
 printf '%s\n' 'CIFS_PASSWORD' > /root/.bootstrap/cifs.pass
 chmod 600 /root/.bootstrap/domain.pass /root/.bootstrap/cifs.pass
-bash install-host.sh
+bash scripts/bootstrap.sh
 ```
 
 ## Перед запуском проверить
@@ -30,4 +31,4 @@ bash install-host.sh
 [RESULT] SUCCESS
 ```
 
-Если на сетевом хранилище не хватает дистрибутивов, `install-host.sh` остановится до запуска bootstrap и покажет понятную ошибку по отсутствующему пакету или каталогу.
+Если на сетевом хранилище не хватает дистрибутивов, соответствующий шаг bootstrap остановится и покажет понятную ошибку по отсутствующему пакету или каталогу.

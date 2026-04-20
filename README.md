@@ -140,7 +140,8 @@ KASPERSKY_ENABLED="1"
 KASPERSKY_SHARE_DIR="/mnt/distr/linux/bootstrap/kesl"
 KASPERSKY_INSTALL_NETWORK_AGENT="1"
 KASPERSKY_AGENT_SERVER="ksc.example.local"
-KASPERSKY_LICENSE="/mnt/distr/linux/bootstrap/kesl/license.key"
+# optional: set KASPERSKY_LICENSE only when activation should be performed locally
+# KASPERSKY_LICENSE="/mnt/distr/linux/bootstrap/kesl/license.key"
 ```
 
 Ожидается, что в `KASPERSKY_SHARE_DIR` лежат RPM-файлы вида:

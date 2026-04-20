@@ -14,7 +14,7 @@ source "$(dirname "$0")/common.sh"
 : "${KASPERSKY_UPDATER_SOURCE:=KLServers}"
 : "${KASPERSKY_PROXY_SERVER:=}"
 : "${KASPERSKY_UPDATE_EXECUTE:=yes}"
-: "${KASPERSKY_LICENSE:=None}"
+: "${KASPERSKY_LICENSE:=}"
 : "${KASPERSKY_AGENT_SERVER:=}"
 : "${KASPERSKY_AGENT_PORT:=14000}"
 : "${KASPERSKY_AGENT_SSL_PORT:=13000}"
@@ -44,12 +44,15 @@ PRIVACY_POLICY_AGREED=yes
 USE_KSN=${KASPERSKY_USE_KSN}
 GROUP_CLEAN=no
 LOCALE=${KASPERSKY_LOCALE}
-INSTALL_LICENSE=${KASPERSKY_LICENSE}
 UPDATER_SOURCE=${KASPERSKY_UPDATER_SOURCE}
 UPDATE_EXECUTE=${KASPERSKY_UPDATE_EXECUTE}
 CONFIGURE_SELINUX=${KASPERSKY_CONFIGURE_SELINUX}
 DISABLE_PROTECTION=no
 EOF
+
+  if [ -n "$KASPERSKY_LICENSE" ]; then
+    printf 'INSTALL_LICENSE=%s\n' "$KASPERSKY_LICENSE" >>"$outfile"
+  fi
 
   if [ -n "$KASPERSKY_ADMIN_USER" ]; then
     printf 'ADMIN_USER=%s\n' "$KASPERSKY_ADMIN_USER" >>"$outfile"
@@ -80,6 +83,7 @@ install_kaspersky() {
   local agent_rpm=""
   local kesl_autoinstall=""
   local agent_answers=""
+  local kesl_setup_rc=0
 
   if [ "$KASPERSKY_ENABLED" != "1" ]; then
     log "[KASPERSKY] skipped"
@@ -133,6 +137,15 @@ install_kaspersky() {
     write_kesl_autoinstall "$kesl_autoinstall"
     log "[KASPERSKY] running silent initial configuration"
     /opt/kaspersky/kesl/bin/kesl-setup.pl --autoinstall="$kesl_autoinstall"
+    kesl_setup_rc=$?
+    if [ "$kesl_setup_rc" -ne 0 ]; then
+      if [ -z "$KASPERSKY_LICENSE" ]; then
+        log_warn "[KASPERSKY] kesl-setup.pl exited with code $kesl_setup_rc without local license; continuing for KSC-managed activation"
+      else
+        rm -f "$kesl_autoinstall"
+        exit "$kesl_setup_rc"
+      fi
+    fi
     rm -f "$kesl_autoinstall"
   fi
 
@@ -160,6 +173,10 @@ install_kaspersky() {
   else
     systemctl restart kesl || true
     kesl-control --app-info >/dev/null 2>&1 || true
+  fi
+
+  if [ "$kesl_setup_rc" -ne 0 ] && [ -z "$KASPERSKY_LICENSE" ]; then
+    log_warn "[KASPERSKY] local activation/update did not finish during setup; complete activation and policy from KSC"
   fi
 
   log "[KASPERSKY] done"

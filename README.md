@@ -55,7 +55,13 @@ cp custom/software.local.sh.example custom/software.local.sh
 cp custom/security.local.sh.example custom/security.local.sh
 ```
 
-3. Подготовьте файлы секретов для безынтерактивного ввода в домен и монтирования CIFS:
+3. Выдайте права на запуск shell-скриптам в корне проекта:
+
+```bash
+chmod +x admin_toolkit_v3/*.sh
+```
+
+4. Подготовьте файлы секретов для безынтерактивного ввода в домен и монтирования CIFS:
 
 ```bash
 install -d -m 700 /root/.bootstrap
@@ -64,7 +70,7 @@ printf '%s\n' 'CIFS_PASSWORD' > /root/.bootstrap/cifs.pass
 chmod 600 /root/.bootstrap/domain.pass /root/.bootstrap/cifs.pass
 ```
 
-4. Запустите bootstrap от `root`:
+5. Запустите bootstrap от `root`:
 
 ```bash
 bash scripts/bootstrap.sh

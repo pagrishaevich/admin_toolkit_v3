@@ -8,7 +8,7 @@ check_ok() {
   local label="$1"
   local cmd="$2"
 
-  if eval "$cmd" >/dev/null 2>&1; then
+  if (set +o pipefail; eval "$cmd") >/dev/null 2>&1; then
     log "$label OK"
   else
     log "$label FAIL"

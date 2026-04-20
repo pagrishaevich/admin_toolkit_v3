@@ -78,7 +78,7 @@ check_vipnet() {
   fi
 
   if [ "$VIPNET_VARIANT" = "gui" ]; then
-    check_ok "VIPNET RPM" "rpm -qa | grep -Eq '^vipnetclient-gui([_-]|$)'"
+    check_ok "VIPNET RPM" "rpm -qa | grep -Eq '^vipnetclient-gui([-_]|$)'"
   else
     check_ok "VIPNET RPM" "rpm -qa | grep -Eq '^vipnetclient($|[-_])'"
   fi

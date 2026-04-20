@@ -69,7 +69,7 @@ printf '%s\n' 'DOMAIN_PASSWORD' > /root/.bootstrap/domain.pass
 chmod 600 /root/.bootstrap/domain.pass
 ```
 
-Для гостевого CIFS-доступа по умолчанию достаточно `CIFS_USERNAME="guest"` и пустого пароля. Если на площадке требуется пароль, дополнительно создайте `/root/.bootstrap/cifs.pass` и задайте `CIFS_PASSWORD_FILE`.
+Для гостевого CIFS-доступа по умолчанию используются `CIFS_USERNAME="guest"` и `CIFS_PASSWORD="guest"`. Если на площадке требуется другой пароль, дополнительно создайте `/root/.bootstrap/cifs.pass` и задайте `CIFS_PASSWORD_FILE`.
 
 5. Запустите bootstrap от `root`:
 

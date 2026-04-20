@@ -61,6 +61,10 @@ configure_cifs_mounts() {
     return 0
   fi
 
+  if [ "$guest_mode" -eq 1 ] && [ -z "$cifs_password" ]; then
+    cifs_password="guest"
+  fi
+
   common_options="credentials=${CIFS_CREDENTIALS_FILE},${CIFS_MOUNT_OPTIONS}"
 
   if [ "$DRY_RUN" = "1" ]; then
@@ -70,9 +74,7 @@ configure_cifs_mounts() {
     cat > "$CIFS_CREDENTIALS_FILE" <<EOF
 username=${CIFS_USERNAME}
 EOF
-    if [ "$guest_mode" -ne 1 ]; then
-      printf 'password=%s\n' "$cifs_password" >> "$CIFS_CREDENTIALS_FILE"
-    fi
+    printf 'password=%s\n' "$cifs_password" >> "$CIFS_CREDENTIALS_FILE"
     if [ -n "$CIFS_DOMAIN" ]; then
       printf 'domain=%s\n' "$CIFS_DOMAIN" >> "$CIFS_CREDENTIALS_FILE"
     fi

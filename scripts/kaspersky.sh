@@ -84,6 +84,7 @@ install_kaspersky() {
   local kesl_autoinstall=""
   local agent_answers=""
   local kesl_setup_rc=0
+  local kesl_setup_timeout="${KASPERSKY_SETUP_TIMEOUT:-300}"
 
   if [ "$KASPERSKY_ENABLED" != "1" ]; then
     log "[KASPERSKY] skipped"
@@ -136,8 +137,10 @@ install_kaspersky() {
     kesl_autoinstall="$(mktemp /tmp/kesl-autoinstall.XXXXXX)"
     write_kesl_autoinstall "$kesl_autoinstall"
     log "[KASPERSKY] running silent initial configuration"
-    /opt/kaspersky/kesl/bin/kesl-setup.pl --autoinstall="$kesl_autoinstall"
+    set +e
+    timeout "$kesl_setup_timeout" /opt/kaspersky/kesl/bin/kesl-setup.pl --autoinstall="$kesl_autoinstall"
     kesl_setup_rc=$?
+    set -e
     if [ "$kesl_setup_rc" -ne 0 ]; then
       if [ -z "$KASPERSKY_LICENSE" ]; then
         log_warn "[KASPERSKY] kesl-setup.pl exited with code $kesl_setup_rc without local license; continuing for KSC-managed activation"

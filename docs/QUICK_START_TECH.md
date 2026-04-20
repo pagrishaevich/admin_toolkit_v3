@@ -7,7 +7,6 @@
 ```bash
 git clone https://github.com/pagrishaevich/admin_toolkit_v3.git
 cd admin_toolkit_v3
-cp config.sh.example config.sh
 install -d -m 700 /root/.bootstrap
 printf '%s\n' 'DOMAIN_PASSWORD' > /root/.bootstrap/domain.pass
 printf '%s\n' 'CIFS_PASSWORD' > /root/.bootstrap/cifs.pass
@@ -17,7 +16,7 @@ bash install-host.sh
 
 ## Перед запуском проверить
 
-- в `config.sh` указан правильный `CIFS_USERNAME`
+- в `scripts/common.sh` указан правильный `CIFS_USERNAME`
 - на сетевом хранилище доступны:
   - `/mnt/distr/linux/bootstrap/kesl`
   - `/mnt/distr/linux/bootstrap/cryptopro`

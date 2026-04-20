@@ -4,19 +4,8 @@ COMMON_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$COMMON_DIR/.." && pwd)"
 DRY_RUN="${DRY_RUN:-0}"
 
-CONFIG_FILE="${BOOTSTRAP_CONFIG:-$PROJECT_ROOT/config.sh}"
-CONFIG_EXAMPLE_FILE="$PROJECT_ROOT/config.sh.example"
-
-if [ -f "$CONFIG_FILE" ]; then
-  # shellcheck source=/dev/null
-  source "$CONFIG_FILE"
-elif [ -f "$CONFIG_EXAMPLE_FILE" ]; then
-  # shellcheck source=/dev/null
-  source "$CONFIG_EXAMPLE_FILE"
-fi
-
 : "${DOMAIN:=yg.loc}"
-: "${DOMAIN_USER:=AGPetrosyan}"
+: "${DOMAIN_USER:=}"
 : "${DOMAIN_PASSWORD:=}"
 : "${DOMAIN_PASSWORD_FILE:=}"
 : "${DNS_SERVERS:=10.14.100.222 10.17.101.222}"
@@ -45,7 +34,7 @@ fi
 : "${TOOLKIT_LOG_FILE:=/var/log/bootstrap.log}"
 : "${REPORT_ARCHIVE_DIR:=/var/log/bootstrap_reports}"
 : "${CUSTOM_DIR:=$PROJECT_ROOT/custom}"
-: "${SUPPORTED_DISTROS:=fedora rhel rocky almalinux centos}"
+: "${SUPPORTED_DISTROS:=fedora rhel rocky almalinux centos redos}"
 : "${FIREWALL_ENABLED:=1}"
 : "${FIREWALL_SERVICES:=ssh}"
 : "${FIREWALL_PORTS:=}"

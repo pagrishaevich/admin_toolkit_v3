@@ -23,7 +23,6 @@ scripts/
   validate.sh       # локальная проверка качества
 custom/
   *.local.sh        # локальные расширения под инфраструктуру
-config.sh.example   # шаблон конфигурации
 ```
 
 ## Порядок выполнения
@@ -46,15 +45,9 @@ config.sh.example   # шаблон конфигурации
 
 ## Быстрый старт
 
-1. Создайте локальную конфигурацию:
+1. Заполните параметры под свою инфраструктуру в `scripts/common.sh`.
 
-```bash
-cp config.sh.example config.sh
-```
-
-2. Заполните параметры под свою инфраструктуру.
-
-3. При необходимости включите локальные расширения:
+2. При необходимости включите локальные расширения:
 
 ```bash
 cp custom/repos.local.sh.example custom/repos.local.sh
@@ -62,7 +55,7 @@ cp custom/software.local.sh.example custom/software.local.sh
 cp custom/security.local.sh.example custom/security.local.sh
 ```
 
-4. Подготовьте файлы секретов для безынтерактивного ввода в домен и монтирования CIFS:
+3. Подготовьте файлы секретов для безынтерактивного ввода в домен и монтирования CIFS:
 
 ```bash
 install -d -m 700 /root/.bootstrap
@@ -71,7 +64,7 @@ printf '%s\n' 'CIFS_PASSWORD' > /root/.bootstrap/cifs.pass
 chmod 600 /root/.bootstrap/domain.pass /root/.bootstrap/cifs.pass
 ```
 
-5. Запустите bootstrap от `root`:
+4. Запустите bootstrap от `root`:
 
 ```bash
 bash scripts/bootstrap.sh
@@ -94,7 +87,7 @@ bash scripts/bootstrap.sh --list-steps
 
 ## Конфигурация
 
-Основные параметры находятся в `config.sh`.
+Основные параметры находятся в `scripts/common.sh`.
 
 Чаще всего используются:
 
@@ -112,8 +105,6 @@ bash scripts/bootstrap.sh --list-steps
 - `VIPNET_*` для тихой установки ViPNet Client без импорта ключей
 - `YANDEX_BROWSER_*` для установки Яндекс Браузера из подключаемого репозитория
 - `R7_*` для установки Р7-Офис и опциональных пакетов из подключаемого репозитория
-
-Если `config.sh` отсутствует, toolkit использует значения из `config.sh.example`.
 
 ## Модель расширения
 
@@ -139,7 +130,7 @@ bash scripts/validate.sh
 
 ## Автоустановка Kaspersky
 
-Toolkit умеет автоматически установить Kaspersky Endpoint Security из уже смонтированной папки, если включить параметры в `config.sh`.
+Toolkit умеет автоматически установить Kaspersky Endpoint Security из уже смонтированной папки, если включить параметры в `scripts/common.sh`.
 
 Минимальный пример:
 

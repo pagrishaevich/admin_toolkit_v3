@@ -10,14 +10,13 @@ cd admin_toolkit_v3
 chmod +x admin_toolkit_v3/*.sh
 install -d -m 700 /root/.bootstrap
 printf '%s\n' 'DOMAIN_PASSWORD' > /root/.bootstrap/domain.pass
-printf '%s\n' 'CIFS_PASSWORD' > /root/.bootstrap/cifs.pass
-chmod 600 /root/.bootstrap/domain.pass /root/.bootstrap/cifs.pass
+chmod 600 /root/.bootstrap/domain.pass
 bash scripts/bootstrap.sh
 ```
 
 ## Перед запуском проверить
 
-- в `scripts/common.sh` указан правильный `CIFS_USERNAME`
+- в `scripts/common.sh` указан правильный `CIFS_USERNAME` (`guest` для гостевого доступа без пароля по умолчанию)
 - на сетевом хранилище доступны:
   - `/mnt/distr/linux/bootstrap/kesl`
   - `/mnt/distr/linux/bootstrap/cryptopro`

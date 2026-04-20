@@ -44,14 +44,19 @@ ensure_fstab_entry() {
 configure_cifs_mounts() {
   local cifs_password=""
   local common_options=""
+  local guest_mode=0
 
   if [ -z "$CIFS_INV_REMOTE" ] || [ -z "$CIFS_DISTR_REMOTE" ] || [ -z "$CIFS_USERNAME" ]; then
     log "[CIFS] fstab autoconfig skipped: remote paths or username are not set"
     return 0
   fi
 
+  if [ "$CIFS_USERNAME" = "guest" ]; then
+    guest_mode=1
+  fi
+
   cifs_password="$(read_secret "$CIFS_PASSWORD" "$CIFS_PASSWORD_FILE" || true)"
-  if [ -z "$cifs_password" ]; then
+  if [ "$guest_mode" -ne 1 ] && [ -z "$cifs_password" ]; then
     log "[CIFS] fstab autoconfig skipped: CIFS password is not set"
     return 0
   fi
@@ -64,8 +69,10 @@ configure_cifs_mounts() {
     mkdir -p "$(dirname "$CIFS_CREDENTIALS_FILE")"
     cat > "$CIFS_CREDENTIALS_FILE" <<EOF
 username=${CIFS_USERNAME}
-password=${cifs_password}
 EOF
+    if [ "$guest_mode" -ne 1 ]; then
+      printf 'password=%s\n' "$cifs_password" >> "$CIFS_CREDENTIALS_FILE"
+    fi
     if [ -n "$CIFS_DOMAIN" ]; then
       printf 'domain=%s\n' "$CIFS_DOMAIN" >> "$CIFS_CREDENTIALS_FILE"
     fi

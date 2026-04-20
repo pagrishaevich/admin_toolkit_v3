@@ -25,6 +25,29 @@ ensure_domain_hosts_entry() {
   log "[DOMAIN] added hosts entry: $entry"
 }
 
+ensure_samba_include_files() {
+  local smb_conf="/etc/samba/smb.conf"
+  local usershares_conf="/etc/samba/usershares.conf"
+
+  [ -f "$smb_conf" ] || return 0
+
+  if ! grep -Eq '^[[:space:]]*include[[:space:]]*=[[:space:]]*/etc/samba/usershares\.conf([[:space:]]|$)' "$smb_conf"; then
+    return 0
+  fi
+
+  if [ -f "$usershares_conf" ]; then
+    return 0
+  fi
+
+  if [ "$DRY_RUN" = "1" ]; then
+    log "[DRY-RUN] create missing Samba include file: $usershares_conf"
+    return 0
+  fi
+
+  install -D -m 0644 /dev/null "$usershares_conf"
+  log "[DOMAIN] created missing Samba include file: $usershares_conf"
+}
+
 read_secret() {
   local direct_value="$1"
   local file_path="$2"
@@ -50,6 +73,7 @@ fi
 HOSTNAME="$(hostname)"
 validate_domain_hostname "$HOSTNAME" || exit 1
 ensure_domain_hosts_entry "$HOSTNAME"
+ensure_samba_include_files
 
 if realm list 2>/dev/null | grep -Fq "$DOMAIN"; then
   log "[DOMAIN] already joined"

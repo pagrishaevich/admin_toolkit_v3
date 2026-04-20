@@ -92,7 +92,11 @@ install_vipnet() {
 
   log "[VIPNET] selected RPM: $vipnet_rpm"
   log "[VIPNET] installing ViPNet Client (${VIPNET_VARIANT})"
-  run_cmd dnf install -y "$vipnet_rpm"
+  if [ "$DRY_RUN" = "1" ]; then
+    log "[DRY-RUN] install ViPNet RPM with accepted EULA: $vipnet_rpm"
+  else
+    printf 'YES\nYES\n' | dnf install -y "$vipnet_rpm"
+  fi
 
   if [ -n "$extract_dir" ] && [ -d "$extract_dir" ]; then
     rm -rf "$extract_dir"

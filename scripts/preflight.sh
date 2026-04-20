@@ -15,6 +15,8 @@ fi
 
 log "[PREFLIGHT] detected ${OS_ID:-unknown} ${OS_VERSION_ID:-unknown}"
 
+validate_domain_hostname "$(hostname)" || exit 1
+
 for cmd in hostname awk grep tee; do
   require_command "$cmd"
 done

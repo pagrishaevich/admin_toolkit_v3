@@ -5,6 +5,26 @@ source "$(dirname "$0")/common.sh"
 require_root
 require_command getent
 
+ensure_domain_hosts_entry() {
+  local host_name="$1"
+  local fqdn="${host_name}.${DOMAIN}"
+  local hosts_file="/etc/hosts"
+  local entry="127.0.0.1 ${fqdn} ${host_name}"
+
+  if grep -Eq "^[[:space:]]*127\\.0\\.0\\.1[[:space:]]+.*\\b${fqdn}\\b.*\\b${host_name}\\b" "$hosts_file"; then
+    log "[DOMAIN] hosts entry already present: $entry"
+    return 0
+  fi
+
+  if [ "$DRY_RUN" = "1" ]; then
+    log "[DRY-RUN] append to $hosts_file: $entry"
+    return 0
+  fi
+
+  printf '%s\n' "$entry" >> "$hosts_file"
+  log "[DOMAIN] added hosts entry: $entry"
+}
+
 read_secret() {
   local direct_value="$1"
   local file_path="$2"
@@ -28,6 +48,8 @@ if ! getent hosts "$DOMAIN"; then
 fi
 
 HOSTNAME="$(hostname)"
+validate_domain_hostname "$HOSTNAME" || exit 1
+ensure_domain_hosts_entry "$HOSTNAME"
 
 if realm list 2>/dev/null | grep -Fq "$DOMAIN"; then
   log "[DOMAIN] already joined"

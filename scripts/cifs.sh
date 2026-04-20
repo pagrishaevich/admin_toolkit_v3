@@ -61,10 +61,6 @@ configure_cifs_mounts() {
     return 0
   fi
 
-  if [ "$guest_mode" -eq 1 ] && [ -z "$cifs_password" ]; then
-    cifs_password="guest"
-  fi
-
   common_options="credentials=${CIFS_CREDENTIALS_FILE},${CIFS_MOUNT_OPTIONS}"
 
   if [ "$DRY_RUN" = "1" ]; then

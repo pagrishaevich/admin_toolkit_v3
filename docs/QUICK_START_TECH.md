@@ -16,7 +16,7 @@ bash scripts/bootstrap.sh
 
 ## Перед запуском проверить
 
-- в `scripts/common.sh` указаны правильные `CIFS_USERNAME` и `CIFS_PASSWORD` (`guest` / `guest` для гостевого доступа по умолчанию)
+- в `scripts/common.sh` указаны правильные `CIFS_USERNAME` и `CIFS_PASSWORD` (`guest` и пустой пароль для гостевого доступа по умолчанию)
 - на сетевом хранилище доступны:
   - `/mnt/distr/linux/bootstrap/kesl`
   - `/mnt/distr/linux/bootstrap/cryptopro`

@@ -124,6 +124,11 @@ install_kaspersky() {
   log "[KASPERSKY] installing dependencies"
   run_cmd dnf install -y perl-Getopt-Long perl-File-Copy
 
+  if [ "$KASPERSKY_CONFIGURE_SELINUX" = "yes" ]; then
+    log "[KASPERSKY] installing SELinux dependencies"
+    run_cmd dnf install -y checkpolicy policycoreutils-python-utils
+  fi
+
   if [ "$KASPERSKY_INSTALL_NETWORK_AGENT" = "1" ] && dnf_package_available libxcrypt-compat; then
     run_cmd dnf install -y libxcrypt-compat
   fi
